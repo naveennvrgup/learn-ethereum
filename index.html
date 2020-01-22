@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Firstcontract</title>
+    <script src="web3.min.js"></script>
+    <script src="abi.js"></script>
+</head>
+
+<body>
+
+    <form>
+        <h1 id="result">,0</h1>
+        <input type="text" id="name">
+        <input type="number" id="age">
+        <button id="submitbtn">submit</button>
+    </form>
+
+
+    <script>
+        web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+        var contractAddress = '0x908E4AB88225673e675C7D4dAE7436c3500c79Ae'; // Add Your Contract address here!!!
+        var contract = web3.eth.contract(abi).at(contractAddress);
+
+        var result = document.getElementById('result')
+
+        document.getElementById('submitbtn').addEventListener('click',(e)=>{
+            e.preventDefault()
+            var name = document.getElementById('name')
+            var age = document.getElementById('age')
+        
+            console.log(name.value,parseInt(age.value))
+            contract.setInstructor(name.value,parseInt(age.value))
+            getdetails()
+        })
+
+        var getdetails = () => {
+            contract.getInstructor((err,res)=>{
+                console.log(res)
+                result.innerHTML=res[0]+','+res[1]
+            })
+        }
+
+        getdetails()
+        
+        console.log(contract)
+    </script>
+</body>
+
+</html>
